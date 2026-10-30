@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <meta name="theme-color" content="#000000">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Boules satisfaisantes</title>
+
+  <!-- Logo de l'application (place icon.png dans le même dossier) -->
+  <link rel="icon" type="image/png" href="icon.png">
+  <link rel="apple-touch-icon" href="icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Scène : taille et orientation (portrait 9:16 ou paysage) gérées par script.js -->
+  <main id="stage" data-state="idle">
+    <canvas id="canvas"></canvas>
+
+    <!-- Compteur de boules -->
+    <div id="hud" aria-live="polite">
+      <span id="count">1</span>
+      <span id="count-label">boule</span>
+    </div>
+
+    <!-- Message affiché avant le premier démarrage -->
+    <p id="hint">Appuie sur Démarrer</p>
+
+    <!-- Menu -->
+    <section id="menu" aria-label="Commandes">
+      <div id="buttons">
+        <button id="btn-start" class="act" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z"/></svg>
+          <span>Démarrer</span>
+        </button>
+        <button id="btn-pause" class="act" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5v14M16 5v14"/></svg>
+          <span>Pause</span>
+        </button>
+        <button id="btn-reset" class="act" type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 12a8 8 0 1 0 2.6-5.9M4 4v4.5h4.5"/></svg>
+          <span>Recommencer</span>
+        </button>
+        <button id="btn-toggle" type="button" aria-label="Afficher ou masquer les réglages" aria-expanded="true">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 9l7 7 7-7"/></svg>
+        </button>
+      </div>
+
+      <div id="sliders">
+        <label class="row">
+          <span class="lbl">Gravité</span>
+          <output id="gravity-out">1800</output>
+          <input id="gravity" type="range" min="200" max="4000" step="50" value="1800">
+        </label>
+        <label class="row">
+          <span class="lbl">Vitesse</span>
+          <output id="speed-out">1.00×</output>
+          <input id="speed" type="range" min="0.25" max="3" step="0.05" value="1">
+        </label>
+        <label class="row">
+          <span class="lbl">Volume</span>
+          <output id="volume-out">60%</output>
+          <input id="volume" type="range" min="0" max="1" step="0.01" value="0.6">
+        </label>
+      </div>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

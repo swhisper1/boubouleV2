@@ -1,0 +1,321 @@
+/* ==========================================================
+   Boules satisfaisantes : apparence et mise en page
+   Fond noir, interface en noir et blanc.
+   Toutes les tailles sont en "em" : script.js règle la taille de
+   police de #stage (1em = 40 unités du monde) pour que le menu
+   s'adapte à l'écran, en portrait comme en paysage.
+   ========================================================== */
+
+:root {
+  --noir: #000;
+  --blanc: #fff;
+  --texte: #f2f2f4;
+  --discret: rgba(255, 255, 255, 0.55);
+  --trait: rgba(255, 255, 255, 0.12);
+  --verre: rgba(16, 16, 18, 0.72);
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  height: 100%;
+  background: var(--noir);
+  color: var(--texte);
+  font-family: system-ui, -apple-system, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  overflow: hidden;
+  overscroll-behavior: none;
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+body {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Scène ---------- */
+#stage {
+  position: relative;
+  overflow: hidden;
+  width: 360px;
+  height: 640px;
+  font-size: 13px;
+  background: var(--noir);
+}
+
+#canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* ---------- Compteur ---------- */
+#hud {
+  position: absolute;
+  top: 3.2%;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 0.45em;
+  pointer-events: none;
+}
+
+#count {
+  font-size: 3em;
+  font-weight: 200;
+  letter-spacing: -0.03em;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+#count-label {
+  font-size: 1em;
+  color: var(--discret);
+}
+
+/* ---------- Message de départ ---------- */
+#hint {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 1.4em;
+  font-weight: 300;
+  color: var(--discret);
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+
+#hint.hidden {
+  opacity: 0;
+}
+
+/* ---------- Menu ---------- */
+#menu {
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 2.5%;
+  padding: 0.7em;
+  display: grid;
+  gap: 0.4em;
+  background: var(--verre);
+  border: 1px solid var(--trait);
+  border-radius: 1.4em;
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+}
+
+#buttons {
+  display: flex;
+  gap: 0.45em;
+}
+
+button {
+  font: inherit;
+  color: var(--texte);
+  background: rgba(255, 255, 255, 0.07);
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s, transform 0.12s;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--blanc);
+  outline-offset: 2px;
+}
+
+button svg {
+  width: 1.25em;
+  height: 1.25em;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Le triangle "lecture" est plein */
+#btn-start svg path {
+  fill: currentColor;
+  stroke-width: 1.2;
+}
+
+/* Boutons d'action : icône au-dessus du texte */
+.act {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.25em;
+  padding: 0.6em 0.2em;
+  border-radius: 1em;
+  font-size: 0.9em;
+  font-weight: 500;
+}
+
+/* Le bouton qui correspond à l'état actuel passe en blanc */
+#stage[data-state="idle"] #btn-start,
+#stage[data-state="running"] #btn-start,
+#stage[data-state="paused"] #btn-pause {
+  background: var(--blanc);
+  color: var(--noir);
+}
+
+/* Bouton rond pour replier les réglages */
+#btn-toggle {
+  flex: 0 0 2.6em;
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  border-radius: 1em;
+}
+
+#btn-toggle svg {
+  transition: transform 0.25s;
+}
+
+#btn-toggle[aria-expanded="false"] svg {
+  transform: rotate(180deg);
+}
+
+/* ---------- Réglages ---------- */
+#sliders {
+  display: grid;
+  gap: 0.2em;
+  padding: 0.3em 0.4em 0.1em;
+}
+
+#sliders.collapsed {
+  display: none;
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  column-gap: 0.6em;
+}
+
+.lbl {
+  font-size: 0.9em;
+  color: var(--discret);
+}
+
+output {
+  font-size: 0.9em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Curseurs personnalisés : fins, blancs */
+input[type="range"] {
+  --p: 50%;
+  grid-column: 1 / -1;
+  width: 100%;
+  height: 1.7em;
+  background: transparent;
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  height: 0.28em;
+  border-radius: 1em;
+  background: linear-gradient(to right, var(--blanc) var(--p), rgba(255, 255, 255, 0.18) var(--p));
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 1.15em;
+  height: 1.15em;
+  margin-top: -0.435em;
+  border-radius: 50%;
+  border: 0;
+  background: var(--blanc);
+  box-shadow: 0 0 0 0.3em rgba(255, 255, 255, 0.1);
+}
+
+input[type="range"]::-moz-range-track {
+  height: 0.28em;
+  border-radius: 1em;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+input[type="range"]::-moz-range-progress {
+  height: 0.28em;
+  border-radius: 1em;
+  background: var(--blanc);
+}
+
+input[type="range"]::-moz-range-thumb {
+  width: 1.15em;
+  height: 1.15em;
+  border: 0;
+  border-radius: 50%;
+  background: var(--blanc);
+}
+
+/* ==========================================================
+   PAYSAGE (iPhone à l'horizontale) : plein écran,
+   menu à droite, compteur en haut à gauche
+   ========================================================== */
+#stage.landscape #hud {
+  top: 1.2em;
+  left: calc(env(safe-area-inset-left, 0px) + 1.2em);
+  right: auto;
+  justify-content: flex-start;
+}
+
+#stage.landscape #menu {
+  top: 50%;
+  bottom: auto;
+  left: auto;
+  right: calc(env(safe-area-inset-right, 0px) + 1em);
+  width: 12.4em;
+  transform: translateY(-50%);
+}
+
+#stage.landscape #buttons {
+  flex-wrap: wrap;
+}
+
+#stage.landscape .act {
+  flex-direction: row;
+  flex: 1 1 100%;
+  justify-content: flex-start;
+  gap: 0.6em;
+  padding: 0.65em 0.9em;
+  font-size: 1em;
+}
+
+#stage.landscape #btn-toggle {
+  flex: 1 1 100%;
+  align-self: auto;
+  padding: 0.35em 0;
+}
+
+#stage.landscape #sliders {
+  padding: 0.5em 0.5em 0.2em;
+}
